@@ -1,17 +1,8 @@
 #include<iostream>
 #include<vector>
 #include<algorithm>
+#include "parsingMachine.h" //MY HEADER
 using namespace std;
-
-
-class parsing{
-private:
-    //
-public:
-    
-};
-
-
 
 int main(){
     bool valid = false;
@@ -27,6 +18,7 @@ int main(){
     }
     valid == true ? cout<<"memproses untuk parsing"<<endl : cout<<"angka tidak valid";
     parsing p;
+    p.startParsing(fileInput);
 
 
     return 0;
