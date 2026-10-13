@@ -1,6 +1,7 @@
 #ifndef PARSING_H
 #define PARSING_H
 
+//sumber: https://www.studyplan.dev/pro-cpp/json#parsing-json-documents
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -20,7 +21,7 @@ public:
         File.open(path);
 
         json Doc = json::parse(File);
-        int checksum{Doc["checksum"]};
+        long checksum{Doc["checksum"]};
         int id{Doc["id"]};
         string name{Doc["name"]};
         int T_unit{Doc["total_unit"]};
@@ -28,7 +29,19 @@ public:
         double M_unit_speed{Doc["motion_unit"][0]["speed"]};
         int M_unit_loop{Doc["motion_unit"][0]["loop"]};
 
-        cout<<id<<endl;
+        cout<<endl;
+        cout<<"DATA HASIL PARSING MOTION "<<Snumber + ".json"<<endl;
+        cout<<"---------------------------"<<endl;
+        cout<<"checksum: "<<checksum<<endl;
+        cout<<"id: "<<id<<endl;
+        cout<<"name: "<<name<<endl;
+        cout<<"total unit: "<<T_unit<<endl;
+        cout<<"motion unit id: "<<M_unit_id<<endl;
+        cout<<"motion unit speed: "<<M_unit_speed<<endl;
+        cout<<"motion unit speed: "<<M_unit_loop<<endl;
+        cout<<"---------------------------"<<endl;
+
+
         continueParsing(M_unit_id);
     }
 
