@@ -3,11 +3,8 @@
 
 //sumber: https://www.studyplan.dev/pro-cpp/json#parsing-json-documents
 #include <iostream>
-#include <string>
 #include <fstream>
 #include <vector>
-#include <algorithm>
-#include <sstream>
 #include "json.hpp"
 using namespace std;
 
@@ -68,6 +65,9 @@ public:
         vector<int> times = Doc["time"].get<vector<int>>();
         vector<vector<int>> motion_frame = Doc["motion_frame"].get<vector<vector<int>>>();
 
+        size_t rows = motion_frame.size();
+        size_t cols = (rows > 0 && !motion_frame[0].empty()) ? motion_frame[0].size() : 1;
+
         cout<<endl;
         cout<<"DATA HASIL PARSING UNIT "<<Snumber + ".json"<<endl;
         cout<<"---------------------------"<<endl;
@@ -80,8 +80,7 @@ public:
             cout<<times[i]<<" ";
         }
         cout<<endl;
-        cout<<"motion frame(s): "<<endl;
-            cout<<endl;
+        cout<<"motion frame(s): Matriks "<<cols<<" X "<<rows<<endl;;
         for (int i = 0;i<motion_frame.size();i++){
             for (int j = 0;j<motion_frame[i].size();j++){
                 cout<<motion_frame[i][j]<<" ";
@@ -90,7 +89,6 @@ public:
         }
             cout<<"---------------------------"<<endl;
         }
-        
 
     };
 
