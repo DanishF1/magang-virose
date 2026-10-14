@@ -5,6 +5,8 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <vector>
+#include <algorithm>
 #include <sstream>
 #include "json.hpp"
 using namespace std;
@@ -64,24 +66,27 @@ public:
         string name{Doc["name"]};
         int total_frame{Doc["total_frame"]};
         int time[] = {Doc["time"][0]};
-        int motion_frame[] = {Doc["motion_frame"][0]};
-
+        
         cout<<endl;
         cout<<"DATA HASIL PARSING UNIT "<<Snumber + ".json"<<endl;
         cout<<"---------------------------"<<endl;
         cout<<"checksum: "<<checksum<<endl;
         cout<<"id: "<<id<<endl;
         cout<<"name: "<<name<<endl;
-        cout<<"total frame: "<<total_frame<<endl;
-        cout<<"total time: "<<time<<endl;
-        cout<<"motion frame: ";
-        for(int i=0;i<sizeof(motion_frame);i++){
-            cout<<motion_frame[i]<<" ";
+        cout<<"total frame: "<<total_frame;
+        for(int i=0;i<sizeof(time);i++){
+            cout<<time[i]<<" ";
         }
-        cout<<"---------------------------"<<endl;
+        cout<<endl;
+        cout<<"motion frame: ";
 
-    }
-};
+            cout<<endl;
+            cout<<"---------------------------"<<endl;
+        }
+        
+
+    };
+
 
 
 
