@@ -27,7 +27,7 @@ void process(int fileInput){
 int main(){
     while(true){
     int fileInput;
-    cout<<"Input desired motion movie (input 0 or Ctrl + c to quit )"<<endl;
+    cout<<"Input desired motion movie (input 0, enter letter(s), or Ctrl + c to quit )"<<endl;
     cin>>fileInput;
     process(fileInput);
     }

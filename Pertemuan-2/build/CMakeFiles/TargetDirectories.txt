@@ -1,3 +1,3 @@
-/home/dan-eksakdev/Documents/Magang_Vi-Rose/Pertemuan-2/build/CMakeFiles/Pertemuan-2.dir
+/home/dan-eksakdev/Documents/Magang_Vi-Rose/Pertemuan-2/build/CMakeFiles/p.dir
 /home/dan-eksakdev/Documents/Magang_Vi-Rose/Pertemuan-2/build/CMakeFiles/edit_cache.dir
 /home/dan-eksakdev/Documents/Magang_Vi-Rose/Pertemuan-2/build/CMakeFiles/rebuild_cache.dir

@@ -1,4 +1,4 @@
-CMakeFiles/Pertemuan-2.dir/main.cpp.o: \
+CMakeFiles/p.dir/main.cpp.o: \
  /home/dan-eksakdev/Documents/Magang_Vi-Rose/Pertemuan-2/main.cpp \
  /usr/include/stdc-predef.h /usr/include/c++/15/iostream \
  /usr/include/c++/15/bits/requires_hosted.h \

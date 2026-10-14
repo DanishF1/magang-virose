@@ -1,2 +1,2 @@
-# Empty dependencies file for Pertemuan-2.
+# Empty dependencies file for p.
 # This may be replaced when dependencies are built.

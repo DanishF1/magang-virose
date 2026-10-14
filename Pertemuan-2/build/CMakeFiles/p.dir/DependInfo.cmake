@@ -8,8 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/dan-eksakdev/Documents/Magang_Vi-Rose/Pertemuan-2/main.cpp" "CMakeFiles/Pertemuan-2.dir/main.cpp.o" "gcc" "CMakeFiles/Pertemuan-2.dir/main.cpp.o.d"
-  "" "Pertemuan-2" "gcc" "CMakeFiles/Pertemuan-2.dir/link.d"
+  "/home/dan-eksakdev/Documents/Magang_Vi-Rose/Pertemuan-2/main.cpp" "CMakeFiles/p.dir/main.cpp.o" "gcc" "CMakeFiles/p.dir/main.cpp.o.d"
+  "" "p" "gcc" "CMakeFiles/p.dir/link.d"
   )
 
 # Targets to which this target links which contain Fortran sources.
