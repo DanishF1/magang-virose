@@ -19,7 +19,10 @@ public:
         string path = "/home/dan-eksakdev/Documents/Magang_Vi-Rose/Pertemuan-2/XL/motion_movie/"+Snumber+".json";
         fstream File;
         File.open(path);
-
+        if(!File.is_open()){
+            cout<<"Err, motion_movie file won't open!";
+            return;
+        }
         json Doc = json::parse(File);
         long checksum{Doc["checksum"]};
         int id{Doc["id"]};
@@ -52,13 +55,16 @@ public:
         fstream File;
         File.open(path);
         json Doc = json::parse(File);
-
+        if(!File.is_open()){
+            cout<<"Err, motion_unit file won't open!";
+            return;
+        }
         long checksum{Doc["checksum"]};
         int id{Doc["id"]};
         string name{Doc["name"]};
         int total_frame{Doc["total_frame"]};
-        int time{Doc["time"]};
-        int motion_frame[]{Doc["motion_frame"][0]};
+        int time[] = {Doc["time"][0]};
+        int motion_frame[] = {Doc["motion_frame"][0]};
 
         cout<<endl;
         cout<<"DATA HASIL PARSING UNIT "<<Snumber + ".json"<<endl;
@@ -75,8 +81,6 @@ public:
         cout<<"---------------------------"<<endl;
 
     }
-    
-
 };
 
 
