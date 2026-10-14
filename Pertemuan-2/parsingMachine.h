@@ -22,7 +22,7 @@ public:
         fstream File;
         File.open(path);
         if(!File.is_open()){
-            cout<<"Err, motion_movie file won't open!";
+            cout<<"Err, motion_movie file won't open!"<<endl;
             return;
         }
         json Doc = json::parse(File);
@@ -58,15 +58,16 @@ public:
         File.open(path);
         json Doc = json::parse(File);
         if(!File.is_open()){
-            cout<<"Err, motion_unit file won't open!";
+            cout<<"Err, motion_unit file won't open!"<<endl;
             return;
         }
         long checksum{Doc["checksum"]};
         int id{Doc["id"]};
         string name{Doc["name"]};
         int total_frame{Doc["total_frame"]};
-        int time[] = {Doc["time"][0]};
-        
+        vector<int> times = Doc["time"].get<vector<int>>();
+        vector<vector<int>> motion_frame = Doc["motion_frame"].get<vector<vector<int>>>();
+
         cout<<endl;
         cout<<"DATA HASIL PARSING UNIT "<<Snumber + ".json"<<endl;
         cout<<"---------------------------"<<endl;
@@ -74,13 +75,19 @@ public:
         cout<<"id: "<<id<<endl;
         cout<<"name: "<<name<<endl;
         cout<<"total frame: "<<total_frame;
-        for(int i=0;i<sizeof(time);i++){
-            cout<<time[i]<<" ";
+        cout<<"time(s): ";
+        for (int i = 0;i<times.size();i++){
+            cout<<times[i]<<" ";
         }
         cout<<endl;
-        cout<<"motion frame: ";
-
+        cout<<"motion frame(s): "<<endl;
             cout<<endl;
+        for (int i = 0;i<motion_frame.size();i++){
+            for (int j = 0;j<motion_frame[i].size();j++){
+                cout<<motion_frame[i][j]<<" ";
+            }
+            cout<<endl;
+        }
             cout<<"---------------------------"<<endl;
         }
         
