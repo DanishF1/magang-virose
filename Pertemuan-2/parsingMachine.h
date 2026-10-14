@@ -14,8 +14,7 @@ public:
 
     void startParsing(int number){
         string Snumber = to_string(number);
-        //string path = string(DATA_DIR) +"XL"+"/motion_movie/"+ Snumber + ".json";
-        string path = "/home/dan-eksakdev/Documents/Magang_Vi-Rose/Pertemuan-2/XL/motion_movie/"+Snumber+".json";
+        string path = string(DATA_DIR) +"XL"+"/motion_movie/"+ Snumber + ".json";
         fstream File;
         File.open(path);
         if(!File.is_open()){
@@ -49,8 +48,7 @@ public:
 
     void continueParsing(int number){
         string Snumber = to_string(number);
-        //string path = string(DATA_DIR) +"XL"+"/motion_unit/"+ Snumber + ".json";
-        string path = "/home/dan-eksakdev/Documents/Magang_Vi-Rose/Pertemuan-2/XL/motion_unit/"+Snumber+".json";
+        string path = string(DATA_DIR) +"XL"+"/motion_unit/"+ Snumber + ".json";
         fstream File;
         File.open(path);
         json Doc = json::parse(File);
