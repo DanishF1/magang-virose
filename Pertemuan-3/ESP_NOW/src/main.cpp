@@ -2,16 +2,18 @@
 
 esp_now_peer_info_t peer_info;
 
+int inputSerial;
+
 uint8_t mac_addresses[MAC_ADDRESS_TOTAL][MAC_ADDRESS_LENGTH] = {
-    {0x24, 0x0A, 0xC4, 0x0A, 0x21, 0x11},  // ESP DOIT
-    {0x24, 0x0A, 0xC4, 0x0A, 0x21, 0x10},  // ESP 38 PIN
+    {0x08,0xA6,0xF7,0xBD,0x45,0x60},  // ESP DOIT
+    {0x20,0x9B,0xA9,0x97,0x79,0x90},  // ESP 38 PIN
 };
 
 const char *mac_names[MAC_ADDRESS_TOTAL] = {
     "FARUQ",                               // 0
-    "FAUZAN",                              // 1
+    "Danish Fattah Azizi",                 // 1
     "RAFAINA",                             // 2
-    "Danish Fattah Azizi",                 // 3
+    "FAUZAN",                              // 3
     "Marsya Safira",                       // 4
     "Faqih Al Minanji",                    // 5
     "Farid Azzam Arrayyan",                // 6
@@ -91,8 +93,23 @@ void callback_data_serial(const uint8_t *data, int len) {
 }
 void baca_serial(void (*callback)(const uint8_t *data, int len)) {
     // TODO 2: implementasi kode buat nerima perintah dari serial
-}
+    if(Serial.available()){
+        inputSerial = Serial.read();
+        
+        }
+    }
 
 void process_perintah(const uint8_t *data, int len, int index_mac_address_asal) {
     // TODO 3: implementasi kode buat processing perintah
+    COMMAND c;
+        switch (c){
+        case HALO:
+            
+            break;
+        case CEK:
+            break;
+        default:
+            break;
+
+}
 }

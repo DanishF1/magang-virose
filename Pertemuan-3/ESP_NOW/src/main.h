@@ -16,7 +16,13 @@ typedef enum {
     FARUQ,                               
     FAUZAN,                              
     RAFAINA,                             
-    Danish_Fattah_Azizi,                                 
+    DANISH_FATTAH_AZIZI,               
+    MARSYA_SAFIRA,                       
+    FAQIH_AL_MINANJI,                    
+    FARID_AZZAM_ARRAYYAN,                
+    KENZI_ATTABANY,                      
+    NABILA_FATHANIA_RIZQI_ROMADLON,      
+    FELICIA_METTA_TANIA,                 
 } ADDRESS_ASSIGNMENT;
 
 typedef enum {
