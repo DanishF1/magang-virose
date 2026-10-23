@@ -1,18 +1,46 @@
+//INI ESP32 YANG LAMA
 #include <Arduino.h>
+#include <EEPROM.h>
+#include <WiFi.h>
+#include <esp_err.h>
+#include <esp_now.h>
+#include <esp_wifi.h>
 
-// put function declarations here:
-int myFunction(int, int);
+class readSerial{
+  public:
+  String command[5] = {"cek", "order", "help", "status"};
+  
+  readSerial(){
+    if(!Serial.available()){
+      return;
+    }else{
+      readCom();
+    }
+  }
+
+  void readCom(){
+    Serial.println("Input keluhanmu");
+    uint8_t inputSerial = Serial.read();
+
+  }
+
+  ~readSerial(){
+    Serial.print("Sending request...");
+  }
+
+};
+#define led 2
+uint8_t mac_addresses[1][6] = {
+    {0x20,0x9B,0xA9,0x97,0x79,0x90}  // ESP 32 SERVER
+};
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+Serial.begin(115200);
+Serial.print("Transmitter Init...");
+pinMode(led, OUTPUT);
+digitalWrite(led,LOW);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-}
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
 }
