@@ -1,0 +1,124 @@
+#include<iostream>
+#include<string>
+#include<cctype>
+#include "libserial/SerialPort.h"
+#include "json.hpp"
+const string token = "5352564C3031"; //put di .env
+void tampilkanMenu(){
+    cout << " 1. help / daftar   : Menampilkan daftar perintah ini" << endl; //DONE
+    cout << " 2. status          : Memeriksa koneksi Serial ke ESP-Bridge" << endl; 
+    cout << " 3. token           : Mengecek / mengatur Token 6-byte" << endl; //DONE
+    cout << " 4. ajukan          : Mengajukan perbaikan perangkat baru" << endl; //ONWORK
+    cout << " 5. cek             : Memeriksa status pengerjaan tiket" << endl; 
+    cout << " 6. ambil           : Mengonfirmasi pengambilan perangkat" << endl; 
+    cout << " 7. send            : Mengirim perintah manual ke sistem" << endl; 
+    cout << " 8. exit / quit     : Keluar dari program" << endl; //DONE
+}
+
+void ajukan(){
+string perangkat;
+string merk;
+string keluhan;
+cout<<"Apa perangkatmu?"<<endl;
+cin>>perangkat;
+cout<<"Apa merk perangkatmu?"<<endl;
+cin>>merk;
+cout<<"Apa keluhan perangkat ini?"<<endl;
+cin>>keluhan;
+}
+
+string trim(const string& str) {
+    size_t first = str.find_first_not_of(" \t\n\r");
+    if (first == string::npos) return ""; // Jika string hanya berisi karakter kosong
+    
+    size_t last = str.find_last_not_of(" \t\n\r");
+    return str.substr(first, (last - first + 1));
+}
+
+using namespace std;
+string inputUser;
+string commandUser[13] = {
+    "cek", "order", "help", "status", "token", "send", "quit", "exit", "daftar",
+    "ajukan", "servis", "track", "ambil"
+};
+
+void bacaInput(string Input){
+int com;
+for(int i=0;i<Input.length();i++){
+    Input[i] = tolower(Input[i]);
+}
+string input = trim(Input);
+
+for (int i=0;i<sizeof(commandUser);i++){
+    if(input==commandUser[i]){
+        com = i;
+    }else if(input.substr(0, 4) == "send"){
+
+    }
+}
+
+switch (com)
+{
+case 6:
+case 7:
+    EXIT_SUCCESS;
+    break;
+
+case 0:
+
+    break;
+case 1:
+    
+    break;
+
+case 2:
+case 8:
+    
+    break;
+
+case 3:
+    
+    break;
+
+case 4:
+    cout<<token<<endl;
+    break;
+
+case 5:
+    
+    break;
+
+case 9:
+    
+    break;
+
+case 10:
+    
+    break;
+
+case 11:
+    
+    break;
+
+case 12:
+    
+    break;
+
+case 13:
+    
+    break;
+
+    
+
+default:
+    break;
+}
+
+}
+
+int main(){
+    cout<<"Selamat datang di Servis Laen, apa yang bisa kami bantu hari ini? (ketik daftar/help untuk menu command)"<<endl;
+    cin>>inputUser;
+    bacaInput(inputUser);
+    return 0;
+}
