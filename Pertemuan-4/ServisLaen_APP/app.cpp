@@ -1,14 +1,16 @@
-#include<iostream>
-#include<string>
-#include<cctype>
+#include <iostream>
+#include <string>
+#include <cctype>
 #include <fstream>
 #include <cstdlib>
 #include <sstream>
 #include <iomanip>
 #include "json.hpp"
 nlohmann::json j;
-const string token = "5352564C3031"; //put di .env
-
+using namespace std;
+string inputUser;
+string token = "5352564C3031"; //put di .env
+bool ketemu = false;
 string stringToHex(const string& input) {
     stringstream ss;
     for (unsigned char c : input) {
@@ -28,7 +30,8 @@ string port = "/dev/ttyUSB0";
         cout << "[Error] ESP32 tidak terdeteksi di " << port << endl;
         return;
     }
-
+    cout<<dataHex<<endl;
+    cout<<stringToHex(dataHex)<<endl;
     serial << stringToHex(dataHex);
     serial.flush();
 
@@ -45,7 +48,8 @@ void tampilkanMenu(){
     cout << " 5. cek             : Memeriksa status pengerjaan tiket" << endl; //DONE
     cout << " 6. ambil           : Mengonfirmasi pengambilan perangkat" << endl;//DONE
     cout << " 7. send            : Mengirim perintah manual ke sistem" << endl; 
-    cout << " 8. exit / quit     : Keluar dari program" << endl; //DONE
+    cout << " 8. track           : Mengirim perintah pengecekan atau tracking pesanan" << endl; //DONE
+    cout << " 9. exit / quit     : Keluar dari program" << endl; //DONE
 }
 
 void status(){
@@ -115,8 +119,6 @@ string trim(const string& str) {
     return str.substr(first, (last - first + 1));
 }
 
-using namespace std;
-string inputUser;
 string commandUser[13] = {
     "cek", "order", "help", "status", "token", "send", "quit", "exit", "daftar",
     "ajukan", "servis", "track", "ambil"
@@ -129,21 +131,24 @@ for(int i=0;i<Input.length();i++){
 }
 string input = trim(Input);
 
-for (int i=0;i<sizeof(commandUser);i++){
+for (int i=0;i<sizeof(commandUser)/sizeof(commandUser[0]);i++){
     if(input==commandUser[i]){
         com = i;
+        ketemu = true;
+        break;
     }else if(input.substr(0, 4) == "send"){
 
-    }else{
-        cout<<"E06"<<endl;
     }
 }
+if(!ketemu){
+        cout<<"E06"<<endl;
+    }
 
 switch (com)
 {
 case 6:
 case 7:
-    EXIT_SUCCESS;
+    exit(0);
     break;
 
 case 0:
@@ -193,9 +198,12 @@ default:
 }
 
 int main(){
+    while(true){
+    ketemu = false;
     cout<<"Selamat datang di Servis Laen, apa yang bisa kami bantu hari ini? (ketik daftar/help untuk menu command)"<<endl;
     cin>>inputUser;
     bacaInput(inputUser);
 
+    }
     return 0;
 }

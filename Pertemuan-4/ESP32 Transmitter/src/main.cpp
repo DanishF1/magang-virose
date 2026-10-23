@@ -8,8 +8,22 @@
 
 class readSerial{
   public:
-  String command[5] = {"cek", "order", "help", "status"};
+  String commandUser[13] = {
+    "cek", "order", "help", "status", "token", "send", "quit", "exit", "daftar",
+    "ajukan", "servis", "track", "ambil"
+  };
+
+  String hexToStringESP(String hexInput) {
+  String output = "";
+  for (int i = 0; i < hexInput.length(); i += 2) {
+    String byteString = hexInput.substring(i, i + 2);
+    char byteVal = (char) strtol(byteString.c_str(), NULL, 16);
+    output += byteVal;
+  }
   
+  return output;
+}
+
   readSerial(){
     if(!Serial.available()){
       return;
@@ -19,13 +33,12 @@ class readSerial{
   }
 
   void readCom(){
-    Serial.println("Input keluhanmu");
-    uint8_t inputSerial = Serial.read();
-
+    String inputSerial = Serial.readStringUntil('\n');
+    String input = hexToStringESP(String(inputSerial));
+    Serial.println(input);
   }
 
   ~readSerial(){
-    Serial.print("Sending request...");
   }
 
 };
@@ -42,5 +55,6 @@ digitalWrite(led,LOW);
 }
 
 void loop() {
-
+readSerial r;
+r;
 }
