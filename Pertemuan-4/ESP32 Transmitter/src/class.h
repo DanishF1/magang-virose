@@ -1,5 +1,7 @@
 #ifndef class_h
 #define class_h
+
+extern uint8_t mac_addresses[1][6];
 class readSerial{
   public:
   readSerial(){
@@ -10,8 +12,7 @@ class readSerial{
     }
   }
 
-
-  String hexToStringESP(String hexInput) {
+  static String hexToStringESP(String hexInput) {
   String output = "";
   for (int i = 0; i < hexInput.length(); i += 2) {
     String byteString = hexInput.substring(i, i + 2);
@@ -58,4 +59,4 @@ void send(String message){
 }
 };
 
-#endif class_h
+#endif

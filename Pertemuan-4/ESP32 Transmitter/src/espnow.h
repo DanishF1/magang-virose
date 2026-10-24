@@ -1,5 +1,6 @@
 #ifndef espnow_h
 #define espnow_h
+#include "class.h"
 //ESPNOW
 #define led 2
 
@@ -25,19 +26,19 @@ void OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len) {
   readSerial r;
   memcpy(&dataTerima, incomingData, sizeof(dataTerima));
   String pesan = dataTerima.pesan;
-  String header = pesan.substring(0, 3);;
-  String source = pesan.substring(4, 5);
-  String destination = pesan.substring(6, 7);
-  String token = pesan.substring(8, 13);
-  String leng = pesan.substring(14, 15);
-  int len = leng.toInt();
-  String payload = pesan.substring(16, pesan.length());
-  String payload = r.hexToStringESP(dataTerima.pesan);
-  String payloadToSerial = token + payload;
-  if(header == "FFFF" && token == "5352564C3031" && len<100 && source.toInt() == 3){
+  String header = pesan.substring(0, 4);;
+  String source = pesan.substring(4, 6);
+  String destination = pesan.substring(6, 8);
+  String token = pesan.substring(8, 20);
+  String leng = pesan.substring(20, 22);
+  int lenInt = leng.toInt();
+  String payload = pesan.substring(22, pesan.length());
+  String payloadHex = r.hexToStringESP(dataTerima.pesan);
+  String payloadToSerial = token + payloadHex;
+  if(header == "FFFF" && token == "5352564C3031" && lenInt<100 && source.toInt() == 3){
     Serial.println(payloadToSerial);
   }
   
 }
 
-#endif espnow_h
+#endif
