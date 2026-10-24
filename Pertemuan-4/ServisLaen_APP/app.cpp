@@ -137,7 +137,20 @@ for (int i=0;i<sizeof(commandUser)/sizeof(commandUser[0]);i++){
         ketemu = true;
         break;
     }else if(input.substr(0, 4) == "send"){
-
+        string perangkat;
+        string merk;
+        string keluhan;
+        cin>>perangkat;
+        cin>>merk;
+        cin>>keluhan;
+        j["action"] = "ajukan";
+        j["perangkat"] = perangkat;
+        j["merk"] = merk;
+        j["keluhan"] = keluhan;
+        string payload = j.dump();
+        sendKebridge(payload);
+        ketemu = true;
+        break;
     }
 }
 if(!ketemu){
