@@ -69,11 +69,12 @@ string perangkat;
 string merk;
 string keluhan;
 cout<<"Apa perangkatmu?"<<endl;
-cin>>perangkat;
+ getline(cin, perangkat);
+
 cout<<"Apa merk perangkatmu?"<<endl;
-cin>>merk;
+getline(cin, merk);
 cout<<"Apa keluhan perangkat ini?"<<endl;
-cin>>keluhan;
+getline(cin, keluhan);
 j["action"] = "ajukan";
 j["perangkat"] = perangkat;
 j["merk"] = merk;
