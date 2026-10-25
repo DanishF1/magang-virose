@@ -1,0 +1,3 @@
+/home/dan-eksakdev/Documents/Magang_Vi-Rose/Pertemuan-4/ServisLaen_APP/build/CMakeFiles/servis_laen.dir
+/home/dan-eksakdev/Documents/Magang_Vi-Rose/Pertemuan-4/ServisLaen_APP/build/CMakeFiles/edit_cache.dir
+/home/dan-eksakdev/Documents/Magang_Vi-Rose/Pertemuan-4/ServisLaen_APP/build/CMakeFiles/rebuild_cache.dir
