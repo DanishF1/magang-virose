@@ -47,13 +47,14 @@ void setup() {
 
   memset(&peerInfo, 0, sizeof(peerInfo));
   memcpy(peerInfo.peer_addr, mac_addresses[0], 6);
-  peerInfo.channel = 0;      // 0 = pakai channel saat ini
+  peerInfo.channel = 0;     
   peerInfo.encrypt = false;
 
   esp_err_t err = esp_now_add_peer(&peerInfo);
   if (err != ESP_OK) {
     Serial.print("Gagal add peer: ");
     Serial.println(esp_err_to_name(err));
+    Serial.println("E12");
     return;
   }
   Serial.println("Siap.");
