@@ -150,7 +150,7 @@ if(Menit1 - Menit0 > 2 && bufferAntrean == 1){
 }else{
     j["action"] = "track";
   j["bisa_diambil"] = false;
-  j["sisa_waktu"] = Menit1 - Menit0;
+  j["waktu_berjalan"] = Menit1 - Menit0;
   serializeJson(j, jsonOutput);
   payloading(stringToHex(jsonOutput)); 
 }
