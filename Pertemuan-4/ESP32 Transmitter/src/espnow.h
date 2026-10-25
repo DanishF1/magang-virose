@@ -16,16 +16,17 @@ struct data{
 data dataTerima;
 data dataKirim;
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
-  digitalWrite(led, HIGH);
+  digitalWrite(led, status == ESP_NOW_SEND_SUCCESS ? HIGH : LOW);
   delay(600);
   digitalWrite(led, LOW);
 }
 
 
 void OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len) {
-  readSerial r;
-  memcpy(&dataTerima, incomingData, sizeof(dataTerima));
+  memset(&dataTerima, 0, sizeof(dataTerima));
+  memcpy(dataTerima.pesan, incomingData, min(len, (int)sizeof(dataTerima.pesan) - 1));
   String pesan = dataTerima.pesan;
+  if(pesan.length() < 22) return;
   String header = pesan.substring(0, 4);;
   String source = pesan.substring(4, 6);
   String destination = pesan.substring(6, 8);
@@ -33,9 +34,9 @@ void OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len) {
   String leng = pesan.substring(20, 22);
   int lenInt = leng.toInt();
   String payload = pesan.substring(22, pesan.length());
-  String payloadHex = r.hexToStringESP(dataTerima.pesan);
+  String payloadHex = readSerial::hexToStringESP(payload);
   String payloadToSerial = token + payloadHex;
-  if(header == "FFFF" && token == "5352564C3031" && lenInt<100 && source.toInt() == 3){
+  if(header == "FFFF" && token == "5352564C3031" && lenInt<100){
     Serial.println(payloadToSerial);
   }
   

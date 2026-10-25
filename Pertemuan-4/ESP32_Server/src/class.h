@@ -14,6 +14,8 @@ extern String jamskr;
 JsonDocument j;
 extern String payloadEN;
 
+#define EEPROM_REC_SIZE 10   
+
 class readSerial{
   public:
   readSerial(){
@@ -65,38 +67,40 @@ String stringToHex(const String &input) {
 }
 
 void antrean(){
-  EEPROM.write(address, nomorAntrean);
-  EEPROM.writeString(addressTime, jamskr);
+  int addr = (nomorAntrean - 1) * EEPROM_REC_SIZE;
+  EEPROM.write(addr, 1);
+  EEPROM.writeString(addr + 1, jamskr);
   EEPROM.commit();
 
+  String jsonOutput;
+  j["action"] = "ajukan";
+  j["id"] = nomorAntrean;
+  serializeJson(j, jsonOutput);
+  payloading(stringToHex(jsonOutput));
 }
 
 void cekAntrean(int nomorAntrean){
 String jsonOutput;
-int bufferAntre;
-EEPROM.get(nomorAntrean, bufferAntre);
-if(bufferAntre == -1){
+int bufferAntre = EEPROM.read((nomorAntrean - 1) * EEPROM_REC_SIZE);
+if(bufferAntre != 1){              
   j["action"] = "cek";
   j["bisa_diambil"] = false;
   serializeJson(j, jsonOutput);
-  jsonOutput = stringToHex(jsonOutput);
-  payloading(stringToHex(jsonOutput));
+  payloading(stringToHex(jsonOutput)); 
 }else{
   j["action"] = "cek";
   j["bisa_diambil"] = true;
   serializeJson(j, jsonOutput);
-  jsonOutput = stringToHex(jsonOutput);
-  payloading(stringToHex(jsonOutput));
+  payloading(stringToHex(jsonOutput)); 
 }
 }
 
 
-void ambilAntrean(int nomerAntrean){
+void ambilAntrean(int nomorAntrean){  
 String jsonOutput;
 String bufferJam;
-int bufferAntrean;
-EEPROM.get(nomorAntrean, bufferAntrean);
-EEPROM.get(nomorAntrean + 1, bufferJam);
+int bufferAntrean = EEPROM.read((nomorAntrean - 1) * EEPROM_REC_SIZE);   
+bufferJam = EEPROM.readString((nomorAntrean - 1) * EEPROM_REC_SIZE + 1); 
 int Jam0 = bufferJam.substring(0,2).toInt();
 int Menit0 = bufferJam.substring(3,5).toInt();
 int Detik0 = bufferJam.substring(6,8).toInt();
@@ -107,31 +111,27 @@ int Menit1 = jamskr.substring(3,5).toInt();
 int Detik1 = jamskr.substring(6,8).toInt();
 Menit1 += Jam1*60;
 
-if(Menit1 - Menit0 > 2 && bufferAntrean != -1){
-  EEPROM.write(nomorAntrean, -1);
+if(Menit1 - Menit0 > 2 && bufferAntrean == 1){                
+  EEPROM.write((nomorAntrean - 1) * EEPROM_REC_SIZE, 0);       
   EEPROM.commit();
-  j["action"] = "track";
+  j["action"] = "ambil";
   j["bisa_diambil"] = true;
   serializeJson(j, jsonOutput);
-  jsonOutput = stringToHex(jsonOutput);
-  payloading(stringToHex(jsonOutput));
-  EEPROM.write(nomorAntrean, -1);
-  EEPROM.commit();
+  payloading(stringToHex(jsonOutput));  
 }else{
-  j["action"] = "track";
+  Serial.println(Menit1 - Menit0);
+  j["action"] = "ambil";
   j["bisa_diambil"] = false;
   serializeJson(j, jsonOutput);
-  jsonOutput = stringToHex(jsonOutput);
-  payloading(stringToHex(jsonOutput));
+  payloading(stringToHex(jsonOutput));  
 }
 }
 //HH:MM:SS
 void trackjam(int nomorJam){
 String jsonOutput;
 String bufferJam;
-int bufferAntrean;
-EEPROM.get(nomorJam-1, bufferAntrean);
-EEPROM.get(nomorJam, bufferJam);
+int bufferAntrean = EEPROM.read((nomorJam - 1) * EEPROM_REC_SIZE);          
+bufferJam = EEPROM.readString((nomorJam - 1) * EEPROM_REC_SIZE + 1);        
 int Jam0 = bufferJam.substring(0,2).toInt();
 int Menit0 = bufferJam.substring(3,5).toInt();
 int Detik0 = bufferJam.substring(6,8).toInt();
@@ -142,23 +142,21 @@ int Menit1 = jamskr.substring(3,5).toInt();
 int Detik1 = jamskr.substring(6,8).toInt();
 Menit1 += Jam1*60;
 
-if(Menit1 - Menit0 > 2 && bufferAntrean != -1){
+if(Menit1 - Menit0 > 2 && bufferAntrean == 1){       
   j["action"] = "track";
   j["bisa_diambil"] = true;
   serializeJson(j, jsonOutput);
-  jsonOutput = stringToHex(jsonOutput);
-  payloading(stringToHex(jsonOutput));
+  payloading(stringToHex(jsonOutput)); 
 }else{
     j["action"] = "track";
   j["bisa_diambil"] = false;
+  j["sisa_waktu"] = Menit1 - Menit0;
   serializeJson(j, jsonOutput);
-  jsonOutput = stringToHex(jsonOutput);
-  payloading(stringToHex(jsonOutput));
+  payloading(stringToHex(jsonOutput)); 
 }
 }
 
 void payloading(String message){
-  String finalPayload;
   int len = message.length();
   String leng;
   if(len>9 && len<100){
@@ -169,13 +167,10 @@ void payloading(String message){
     leng = "00";
   }
   String payload = "FFFF03025352564C3031"+leng+message;
-String bawaan = "";
-send(finalPayload);
-
+  send(payload);   
 }
 
 void payloading(String message, int nomorAntrean, bool bisaDiambil=false){
-  String finalPayload;
   int len = message.length();
   String leng;
   if(len>9 && len<100){
@@ -186,14 +181,17 @@ void payloading(String message, int nomorAntrean, bool bisaDiambil=false){
     leng = "00";
   }
   String payload = "FFFF03025352564C3031"+leng+message;
-String bawaan = "";
-send(finalPayload);
-
+  send(payload);  
 }
 
 void send(String message){
 
-  uint8_t result = esp_now_send(mac_addresses[0], (uint8_t*)message.c_str(), message.length());
+  esp_err_t result = esp_now_send(mac_addresses[0], (uint8_t*)message.c_str(), message.length());  
+  if(result != ESP_OK){
+    message = "E12";
+    Serial.println(esp_err_to_name(result));   
+    esp_err_t result = esp_now_send(mac_addresses[0], (uint8_t*)message.c_str(), message.length());  
+  }
 
 }
 

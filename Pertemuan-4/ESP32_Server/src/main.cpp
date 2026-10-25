@@ -11,46 +11,83 @@
 #include "class.h"
 #include "espnow.h"
 #define EEPROM_SIZE 512
+
 const char* ssid = "Dan";
 const char* pass = "12345678";
 
 WiFiUDP ntpUDP;
-// GMT+7 (WIB) = 7 * 3600 = 25200 detik offset
+// GMT+7 (WIB) = 7 * 3600 = 25200 detik
 NTPClient timeClient(ntpUDP, "pool.ntp.org", 25200);
 String jamskr = "";
+unsigned long ledOffAt = 0;
 
 void setup() {
-Serial.begin(115200);
-Serial.print("Transmitter Init...");
-WiFi.begin(ssid, pass);
-WiFi.mode(WIFI_STA);
-esp_now_register_recv_cb(OnDataRecv);
-esp_now_register_send_cb(OnDataSent);
-memcpy(peerInfo.peer_addr, mac_addresses, 6);
-  peerInfo.channel = 0;  
-  peerInfo.encrypt = false;
-  
-  if (esp_now_add_peer(&peerInfo) != ESP_OK) {
-    Serial.println("Gagal menambahkan Peer");
-    return;
-  }
-  
-    if (!EEPROM.begin(EEPROM_SIZE)) {
+  Serial.begin(115200);
+  Serial.println("Transmitter Init...");
+
+  pinMode(led, OUTPUT);
+  digitalWrite(led, LOW);
+
+  if (!EEPROM.begin(EEPROM_SIZE)) {
     Serial.println("Failed to initialize EEPROM");
     return;
-    }
-pinMode(led, OUTPUT);
-digitalWrite(led,LOW);
-timeClient.begin();
+  }
+
+  // 1. WiFi dulu, tunggu terhubung agar channel sudah pasti
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, pass);
+  unsigned long t = millis();
+  while (WiFi.status() != WL_CONNECTED && millis() - t < 10000) {
+    delay(250);
+    Serial.print(".");
+  }
+  Serial.println();
+  if (WiFi.status() == WL_CONNECTED) {
+    Serial.print("WiFi OK, channel: ");
+    Serial.println(WiFi.channel());  
+  } else {
+    Serial.println("WiFi belum terhubung (akan dicoba lagi di loop)");
+  }
+  Serial.print("MAC ESP ini: ");
+  Serial.println(WiFi.macAddress());
+
+  timeClient.begin();
+
+  // 2. ESP-NOW
+  if (esp_now_init() != ESP_OK) {
+    Serial.println("ESP-NOW init gagal");
+    return;
+  }
+  esp_now_register_recv_cb(OnDataRecv);
+  esp_now_register_send_cb(OnDataSent);
+
+  memset(&peerInfo, 0, sizeof(peerInfo));
+  memcpy(peerInfo.peer_addr, mac_addresses[0], 6);
+  peerInfo.channel = 0;      // 0 = pakai channel saat ini
+  peerInfo.encrypt = false;
+
+  esp_err_t err = esp_now_add_peer(&peerInfo);
+  if (err != ESP_OK) {
+    Serial.print("Gagal menambahkan Peer: ");
+    Serial.println(esp_err_to_name(err));
+    return;
+  }
+  Serial.println("Siap.");
 }
 
 void loop() {
-  if(WiFi.status() != WL_CONNECTED){
-    WiFi.begin(ssid,pass);
-  }
-  timeClient.update();
-  jamskr = timeClient.getFormattedTime();
+  static unsigned long lastReconnect = 0;
 
-readSerial r;
-r;
+  if (WiFi.status() == WL_CONNECTED) {
+    timeClient.update();
+    if (timeClient.isTimeSet()) {
+      jamskr = timeClient.getFormattedTime();
+    }
+  } else if (millis() - lastReconnect > 10000) {   // jangan spam WiFi.begin
+    lastReconnect = millis();
+    WiFi.reconnect();
+  }
+
+
+  readSerial r;
 }

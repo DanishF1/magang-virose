@@ -5,7 +5,9 @@
 #include <cstdlib>
 #include <sstream>
 #include <iomanip>
+#include <limits>
 #include "json.hpp"
+
 nlohmann::json j;
 using namespace std;
 string inputUser;
@@ -22,22 +24,30 @@ string stringToHex(const string& input) {
 void sendKebridge(string dataHex){
 string port = "/dev/ttyUSB0";
 
-    string configCmd = "stty -F " + port + " 115200 raw -echo";
+    string configCmd = "stty -F " + port + " 115200 raw -echo min 0 time 200";
     system(configCmd.c_str());
 
     fstream serial(port, ios::in | ios::out);
     if (!serial.is_open()) {
-        cout << "[Error] ESP32 tidak terdeteksi di " << port << endl;
+        cout << "E11" << port << endl;
         return;
     }
     cout<<dataHex<<endl;
     cout<<stringToHex(dataHex)<<endl;
-    serial << stringToHex(dataHex);
+    serial << stringToHex(dataHex)<<"\n";
     serial.flush();
 
     string respon;
-    if (getline(serial, respon)) {
-        cout << "Respon ESP32: " << respon << endl;
+    bool dapat = false;
+    while (getline(serial, respon)) {          
+        if (respon.rfind(token, 0) == 0) {     
+            cout << "Wahai customer: " << respon.substr(token.length()) << endl;
+            dapat = true;
+            break;
+        }
+    }
+    if (!dapat) {
+        cout << "E10" << endl;
     }
 }
 void tampilkanMenu(){
@@ -65,12 +75,12 @@ void status(){
     }
 }
 void ajukan(){
+    j.clear();
 string perangkat;
 string merk;
 string keluhan;
 cout<<"Apa perangkatmu?"<<endl;
  getline(cin, perangkat);
-
 cout<<"Apa merk perangkatmu?"<<endl;
 getline(cin, merk);
 cout<<"Apa keluhan perangkat ini?"<<endl;
@@ -84,6 +94,7 @@ sendKebridge(payload);
 }
 
 void cek(){
+    j.clear();
 string nomorTiket;
 cout<<"Masukkan nomor tiket/antreanmu"<<endl;
 cin>>nomorTiket;
@@ -94,6 +105,7 @@ sendKebridge(payload);
 }
 
 void ambil(){
+    j.clear();
 string nomorTiket;
 cout<<"Masukkan nomor tiket/antreanmu yang mau diambil"<<endl;
 cin>>nomorTiket;
@@ -104,6 +116,7 @@ sendKebridge(payload);
 }
 
 void track(){
+    j.clear();
 string nomorTiket;
 cout<<"Masukkan nomor tiket/antreanmu yang mau dicek/track"<<endl;
 cin>>nomorTiket;
@@ -138,6 +151,7 @@ for (int i=0;i<sizeof(commandUser)/sizeof(commandUser[0]);i++){
         ketemu = true;
         break;
     }else if(input.substr(0, 4) == "send"){
+        j.clear();
         string perangkat;
         string merk;
         string keluhan;
@@ -216,6 +230,7 @@ int main(){
     ketemu = false;
     cout<<"Selamat datang di Servis Laen, apa yang bisa kami bantu hari ini? (ketik daftar/help untuk menu command)"<<endl;
     cin>>inputUser;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
     bacaInput(inputUser);
 
     }

@@ -2,6 +2,35 @@
 #define class_h
 
 extern uint8_t mac_addresses[1][6];
+
+
+class sendToServer{
+private:
+JsonDocument j;
+public:
+sendToServer(){
+
+}
+
+void send(String message){
+  int len = message.length();
+  String leng;
+  if(len>9 && len<100){
+    leng = String(len);
+  }else if(len>0 && len<10){
+    leng = "0"+String(len);
+  }else{
+    leng = "00";
+  }
+  String payload = "FFFF02035352564C3031"+leng+message;
+  esp_err_t result = esp_now_send(mac_addresses[0], (uint8_t*)payload.c_str(), payload.length());
+  if(result != ESP_OK){
+    Serial.println("E12");
+  }
+
+}
+};
+
 class readSerial{
   public:
   readSerial(){
@@ -25,38 +54,15 @@ class readSerial{
 
   void readCom(){
     String inputSerial = Serial.readStringUntil('\n');
-    String input = hexToStringESP(String(inputSerial));
-    Serial.println(inputSerial);
-
+    inputSerial.trim();
+    if(inputSerial.length() == 0) return;
+    sendToServer s;
+    s.send(inputSerial);
   }
 
   ~readSerial(){
   }
 
-};
-
-class sendToServer{
-private:
-JsonDocument j;
-public:
-sendToServer(String message){
-  send(message);
-}
-
-void send(String message){
-  int len = message.length();
-  String leng;
-  if(len>9 && len<100){
-    leng = String(len);
-  }else if(len>0 && len<10){
-    leng = "0"+String(len);
-  }else{
-    leng = "00";
-  }
-  String payload = "FFFF02035352564C3031"+leng+message;
-  uint8_t result = esp_now_send(mac_addresses[0], (uint8_t*)payload.c_str(), payload.length());
-
-}
 };
 
 #endif
