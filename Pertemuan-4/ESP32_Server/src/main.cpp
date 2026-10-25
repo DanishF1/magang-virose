@@ -33,7 +33,6 @@ void setup() {
     return;
   }
 
-  // 1. WiFi dulu, tunggu terhubung agar channel sudah pasti
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, pass);
   unsigned long t = millis();

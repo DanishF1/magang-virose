@@ -15,7 +15,6 @@ esp_now_peer_info_t peerInfo;
 struct data{
   char pesan[250];
   int id;
-
 };
 data dataTerima;
 data dataKirim;
