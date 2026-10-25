@@ -77,7 +77,7 @@ void OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len) {
   }else if(action == "ambil"){
     s.ambilAntrean(antrian);
   }else{
-    Serial.println("action tidak dikenal");
+    Serial.println("E06");
   }
   }else if(token != "5352564C3031"){
     s.send("E01");
