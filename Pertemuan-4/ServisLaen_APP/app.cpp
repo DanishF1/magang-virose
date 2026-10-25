@@ -29,11 +29,10 @@ string port = "/dev/ttyUSB0";
 
     fstream serial(port, ios::in | ios::out);
     if (!serial.is_open()) {
-        cout << "E11" << port << endl;
+        cout << "E11" << endl;
         return;
     }
-    cout<<dataHex<<endl;
-    cout<<stringToHex(dataHex)<<endl;
+
     serial << stringToHex(dataHex)<<"\n";
     serial.flush();
 
@@ -70,7 +69,7 @@ void status(){
 
     fstream serial(port, ios::in | ios::out);
     if (!serial.is_open()) {
-        cout << "[Error] ESP32 tidak terdeteksi di " << port << endl;
+        cout << "E11" << endl;
         return;
     }
 }
@@ -228,6 +227,7 @@ default:
 int main(){
     while(true){
     ketemu = false;
+    cout<<endl;
     cout<<"Selamat datang di Servis Laen, apa yang bisa kami bantu hari ini? (ketik daftar/help untuk menu command)"<<endl;
     cin>>inputUser;
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
